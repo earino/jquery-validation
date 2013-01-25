@@ -646,7 +646,7 @@ $.extend($.validator, {
 				if ( this.settings.highlight ) {
 					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
 				}
-				this.showLabel( error.element, error.message );
+				this.showLabel( error.element, error.message, true );
 			}
 			if( this.errorList.length ) {
 				this.toShow = this.toShow.add( this.containers );
@@ -676,7 +676,7 @@ $.extend($.validator, {
 			});
 		},
 
-		showLabel: function(element, message) {
+		showLabel: function(element, message, showingError) {
 			var label = this.errorsFor( element );
 			if ( label.length ) {
 				// refresh error/success class
@@ -705,7 +705,12 @@ $.extend($.validator, {
 					}
 				}
 			}
-			if ( !message && this.settings.success ) {
+			if (showingError === undefined) {
+				showingError = false;
+			}
+			
+			// allow empty message as "error" message (usefull when showing error icons only)
+			if ( !message && !showingError && this.settings.success ) {
 				label.text("");
 				if ( typeof this.settings.success === "string" ) {
 					label.addClass( this.settings.success );
